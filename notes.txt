@@ -1,0 +1,262 @@
+1. Packages
+   1.1 Every custom package letter starts with capital letter
+
+2. Functions 
+Data types in go
+1. Boolean type - 'bool' default is false
+2. Numeric types:
+   2.1 Integer types:
+       2.1.1 Int - Both positive and negative signed Integer
+       2.1.2 Uint - Unsigned Integer
+       2.1.3 Default value og int is 0
+   2.2 Floating numbers - float32 and float64 - default value is 0.0
+   2.3 Complex numbers - complex64 and complex128
+3. String type - String
+4. derived types - pointers, slicers, array, interface, map
+
+a, b := 12.0, 5.0
+	fmt.Println(simplecalc.Add(a, b))
+	/* for loop */
+	for i := 0; i < 10; i += 2 {
+		fmt.Println("Hello World!")
+	}
+	/* while loop */
+	i := 0
+	for {
+		fmt.Println("Hello")
+		i += 1
+		if i >= 5 {
+			break
+		}
+	}
+	/* if-else loop */
+	c := 10.0
+	if c == 10.0 {
+		fmt.Println("True")
+	} else {
+		fmt.Println("False")
+	}
+
+	/* case */
+	day := 4
+	switch day {
+	case 1:
+		fmt.Println("Monday")
+	case 2:
+		fmt.Println("Tuesday")
+	case 3:
+		fmt.Println("Wednesday")
+	case 4:
+		fmt.Println("Thursday")
+	case 5:
+		fmt.Println("Friday")
+	default:
+		fmt.Println("Invalid date")
+	}
+
+// defer 
+	fmt.Println("Start")
+	defer fmt.Println("End")
+	fmt.Println("some")
+	defer fmt.Println("War")
+
+1. pointers
+2. Structures
+3. Arrays
+
+Pointers - stores the memory adderss of another variable
+- Zero value of opinter is NIL
+- Go does not support pointer arithematics
+//pointer
+
+	var x int = 42
+	var p *int = &x
+	fmt.Println(*p)
+	fmt.Println(x)
+	*p = 100
+	fmt.Println(*p)
+	fmt.Println(x)
+
+
+Structures (Struct)
+Library API - Bizlogic.go, Controller.go or handler.go, routes.go - json - go understandable
+Dataservice - library {Name, bookiid, author}
+Model - 
+
+{
+    "name" : "abc"
+    "bookid" : "123"
+    "author" : "abc"
+}
+
+type Person struct {
+	Name    string
+	Age     int
+	Address string
+}
+
+func main() {
+	//structure
+	p := Person{"Bob", 24, "231 Baker St"}
+	UpdateAge(&p, 31)
+	fmt.Println(p.Age)
+}
+
+func UpdateAge(p *Person, Age int) {
+	p.Age = Age
+}
+
+Arrays
+func main() {
+	// Arrays
+
+	var arr = [5]int{1, 2, 3, 4, 5}
+	arr[1] = 10
+	fmt.Println(arr[0])
+
+	i := 0
+	for i < len(arr)-1 {
+		i++
+		fmt.Println(arr[i])
+	}
+
+	modifyArray(arr)
+	fmt.Println(arr)
+}
+
+func modifyArray(arr [5]int) {
+	arr[2] = 100
+	fmt.Println(arr)
+}
+
+Slices and Maps
+
+Slices:
+    We have both length and capacity
+    length - it is the number of elements it contains
+    capacity - no of elements the slice can hold. 4 ways to declare a slice
+    1. var s []int
+    2. s:=make([]int, length)
+    3. s:=make([]int, length,capacity)
+    4. s:= []int{1,2,3,4}
+
+if i am creating a slice from array ex.
+
+func main() {
+	s := make([]int, 4, 6)
+	fmt.Printf("length : %d, Capacity : %d, Slice : %v\n", len(s), cap(s), s)
+
+	s = append(s, 1)
+	s = append(s, 2)
+	fmt.Printf("length : %d, Capacity : %d, Slice : %v\n", len(s), cap(s), s)
+
+	s = append(s, 3)
+	fmt.Printf("length : %d, Capacity : %d, Slice : %v\n", len(s), cap(s), s)
+}
+
+Maps:
+    Efficient way to store a key-value pair
+    1. m:= make(map[int]string)
+    2. m: map[int]string{
+        1: "yellow"
+        2. "bird"
+    }
+    3. var m map[string]int
+
+func main() {
+	m := map[string]int{
+		"hello": 1,
+		"world": 2,
+	}
+	m["Go"] = 3
+
+	delete(m, "world")
+
+	if value, exists := m["Go"]; exists {
+		fmt.Println(value)
+	} else {
+		fmt.Println("Value doesnt exist")
+	}
+	for key, value := range m {
+		fmt.Println(key, value)
+	}
+}
+
+Interfaces: 
+
+
+type Shape interface {
+	Area() float64
+	Circumf() float64
+}
+
+type Circle struct {
+	Radius float64
+}
+
+func (c Circle) Area() float64 {
+	return math.Pi * c.Radius * c.Radius
+}
+
+func (c Circle) Circumf() float64 {
+	return 2 * math.Pi * c.Radius
+}
+
+func main() {
+	var s Shape
+
+	s = Circle{Radius: 7}
+	fmt.Println("circle area :", s.Area())
+	fmt.Println("circle circumference", s.Circumf())
+}
+
+
+Goroutines and channels
+Goroutines
+
+func sayHello() {
+	fmt.Println("hello, world!")
+}
+func main() {
+	go sayHello()
+	time.Sleep(1 * time.Second)
+
+	fmt.Println("the function ends")
+
+}
+
+
+-Buffered and unbuffered channels
+
+//basic channel
+func main() {
+	message := make(chan string)
+	go func() {
+		message <- "Hello, channel!"
+	}()
+
+	msg := <-message
+	fmt.Println(msg)
+}
+
+unbuffered channel: 
+    1. Doesnt have any capacity to hold values
+    2. Send operation on an unbufferd channel will block until another go routine is ready to receive the channel, and receive operation is blocked 
+    until a value is set on channel
+
+func main() {
+	ch := make(chan string)
+
+	go func() { //anon value
+		time.Sleep(2 * time.Second)
+		ch <- "Hello, World!" //sending message
+	}()
+
+	fmt.Println("Waiting for message..")
+	msg := <-ch //receiving message
+	fmt.Println("Received -", msg)
+}
+
+Buffered channel:
+    1. it has the capacity to hold ceertain number of values
+
